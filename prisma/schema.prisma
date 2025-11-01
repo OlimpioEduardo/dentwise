@@ -22,11 +22,11 @@ model User {
   firstName String?
   lastName  String?
   phone     String?
-  createdAt DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt DateTime @default(now()) // member since sep 2025
+  updatedAt DateTime @updatedAt
 
-// Relacoes
-  appointment Appointment[]
+  // relationships
+  appointments Appointment[]
 
   @@map("users")
 }
