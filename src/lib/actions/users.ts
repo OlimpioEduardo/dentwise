@@ -23,8 +23,7 @@ export async function syncUser() {
 
       
     });
-    console.log(user)
-
+    
     return dbUser;
   } catch (error) {
     console.log("Error in syncUser server action", error);
