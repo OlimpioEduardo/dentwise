@@ -87,7 +87,7 @@ const AddDoctorDialog = ({isOpen, onClose}:AddDoctorDialogProps) => {
         <div className="space-y-2">
             <Label htmlFor="new-email">Email *</Label>
             <Input
-            id="new-Email"
+            id="new-email"
             value={newDoctor.email}
             onChange={(e)=>setNewDoctor({...newDoctor, email: e.target.value})}
             placeholder="doctor@example.com"
