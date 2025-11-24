@@ -1,8 +1,8 @@
-"use server"
+"use server";
 
 import { auth } from "@clerk/nextjs/server";
 import { prisma } from "../prisma";
-
+import { AppointmentStatus } from "@prisma/client";
 
 function transformAppointment(appointment: any) {
   return {
@@ -15,33 +15,27 @@ function transformAppointment(appointment: any) {
   };
 }
 
-export async function getAppointments(){
-    try {
-      const appointments = await prisma.appointment.findMany({
-            include:{
-                user:{
-                    select:{
-                        firstName:true,
-                        lastName:true,
-                        email:true
-                    }
-                },
+export async function getAppointments() {
+  try {
+    const appointments = await prisma.appointment.findMany({
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+        doctor: { select: { name: true, imageUrl: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    });
 
-                doctor:{
-                    select:{
-                        name:true,
-                        imageUrl:true
-                    }
-                },
-            },
-            orderBy:{createdAt:"desc"}
-        })
-
-        return appointments;
-    } catch (error) {
-     console.log("Error fecthing appointments:", error)
-     throw new Error("Failed to fecth appointments")   
-    }
+    return appointments.map(transformAppointment);
+  } catch (error) {
+    console.log("Error fetching appointments:", error);
+    throw new Error("Failed to fetch appointments");
+  }
 }
 
 export async function getUserAppointments() {
@@ -163,10 +157,22 @@ export async function bookAppointment(input: BookAppointmentInput) {
     });
 
     return transformAppointment(appointment);
-
   } catch (error) {
-    
     console.error("Error booking appointment:", error);
     throw new Error("Failed to book appointment. Please try again later.");
+  }
+}
+
+export async function updateAppointmentStatus(input: { id: string; status: AppointmentStatus }) {
+  try {
+    const appointment = await prisma.appointment.update({
+      where: { id: input.id },
+      data: { status: input.status },
+    });
+
+    return appointment;
+  } catch (error) {
+    console.error("Error updating appointment:", error);
+    throw new Error("Failed to update appointment");
   }
 }
