@@ -82,7 +82,9 @@ function AppointmentConfirmationEmail({
           </Text>
 
           <Section style={buttonContainer}>
-            <Link style={button} href={process.env.NEXT_PUBLIC_APP_URL + "/appointments"}>
+            <Link style={button} href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/appointments`}>
+              View My Appointments
+            </Link>
               View My Appointments
             </Link>
           </Section>
